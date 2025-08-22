@@ -35,3 +35,8 @@ services:
       - PGADMIN_CONFIG_ENHANCED_COOKIE_AUTH=False
     ports:
       - '80:80'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  pgadmin_data:

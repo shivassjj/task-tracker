@@ -13,7 +13,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
     ports:
       - '8080:8080'
 
@@ -25,6 +25,8 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   db-pgadmin:
     image: 'dpage/pgadmin4:latest'
@@ -40,3 +42,4 @@ services:
 
 volumes:
   pgadmin_data:
+  pgdata:

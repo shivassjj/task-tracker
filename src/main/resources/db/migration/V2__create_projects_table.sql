@@ -1,0 +1,7 @@
+CREATE TABLE projects (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
+
+    user_id BIGINT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT
+);

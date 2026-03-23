@@ -1,7 +1,7 @@
 CREATE TABLE projects (
     id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(50) NOT NULL,
-
-    user_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    owner_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

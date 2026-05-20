@@ -66,10 +66,7 @@ class UserServiceTest {
 
     @Test
     void create_shouldThrow_whenEmailAlreadyTaken() {
-        UserCreateRequest request = new UserCreateRequest();
-        request.setUsername("user1");
-        request.setEmail("user1@mail.ru");
-        request.setPassword("123");
+        UserCreateRequest request = new UserCreateRequest("user1", "user1@mail.ru", "123");
 
         when(userRepository.existsByEmail("user1@mail.ru"))
                 .thenReturn(true);
@@ -83,10 +80,7 @@ class UserServiceTest {
 
     @Test
     void create_shouldThrow_whenUsernameAlreadyTaken() {
-        UserCreateRequest request = new UserCreateRequest();
-        request.setUsername("user1");
-        request.setEmail("user1@mail.ru");
-        request.setPassword("123");
+        UserCreateRequest request = new UserCreateRequest("user1", "user1@mail.ru", "123");
 
         when(userRepository.existsByUsername("user1"))
                 .thenReturn(true);
@@ -100,10 +94,7 @@ class UserServiceTest {
 
     @Test
     void create_shouldSaveUser_whenDataIsValid() {
-        UserCreateRequest request = new UserCreateRequest();
-        request.setUsername("user1");
-        request.setEmail("user1@mail.ru");
-        request.setPassword("123");
+        UserCreateRequest request = new UserCreateRequest("user1", "user1@mail.ru", "123");
 
         when(userRepository.existsByEmail("user1@mail.ru"))
                 .thenReturn(false);
@@ -143,9 +134,7 @@ class UserServiceTest {
         when(userRepository.existsByUsername("newUser1")).thenReturn(false);
         when(userRepository.existsByEmail("newEmail1@mail.ru")).thenReturn(false);
 
-        UserUpdateRequest request = new UserUpdateRequest();
-        request.setUsername("newUser1");
-        request.setEmail("newEmail1@mail.ru");
+        UserUpdateRequest request = new UserUpdateRequest("newUser1", "newEmail1@mail.ru");
 
         UserResponse response = userService.update(1L, request);
 
@@ -157,7 +146,7 @@ class UserServiceTest {
     void update_shouldThrow_whenUserNotFound() {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> userService.update(1L, new UserUpdateRequest()))
+        assertThatThrownBy(() -> userService.update(1L, new UserUpdateRequest(null, null)))
                 .isInstanceOf(EntityNotFoundException.class);
     }
 

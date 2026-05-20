@@ -53,10 +53,7 @@ class UserControllerTest {
     @Test
     @WithMockUser
     void create_shouldReturn201_whenRequestIsValid() throws Exception {
-        UserCreateRequest request = new UserCreateRequest();
-        request.setUsername("user1");
-        request.setEmail("user1@mail.ru");
-        request.setPassword("123");
+        UserCreateRequest request = new UserCreateRequest("user1", "user1@mail.ru", "123");
 
         when(userService.create(any())).thenReturn(buildResponse(1L, "user1", "user1@mail.ru"));
 

@@ -34,17 +34,17 @@ public class UserService {
 
     @Transactional
     public UserResponse create(UserCreateRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email уже занят: " + request.getEmail());
+        if (userRepository.existsByEmail(request.email())) {
+            throw new IllegalArgumentException("Email уже занят: " + request.email());
         }
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new IllegalArgumentException("Username уже занят: " + request.getUsername());
+        if (userRepository.existsByUsername(request.username())) {
+            throw new IllegalArgumentException("Username уже занят: " + request.username());
         }
 
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setUsername(request.username());
+        user.setEmail(request.email());
+        user.setPasswordHash(passwordEncoder.encode(request.password()));
 
         return UserResponse.from(userRepository.save(user));
     }
@@ -54,18 +54,18 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
-        if (request.getUsername() != null) {
-            if (userRepository.existsByUsername(request.getUsername())) {
+        if (request.username() != null) {
+            if (userRepository.existsByUsername(request.username())) {
                 throw new IllegalArgumentException("Username уже занят");
             }
-            user.setUsername(request.getUsername());
+            user.setUsername(request.username());
         }
 
-        if (request.getEmail() != null) {
-            if (userRepository.existsByEmail(request.getEmail())) {
+        if (request.username() != null) {
+            if (userRepository.existsByEmail(request.username())) {
                 throw new IllegalArgumentException("Email уже занят");
             }
-            user.setEmail(request.getEmail());
+            user.setEmail(request.username());
         }
 
         return UserResponse.from(user);

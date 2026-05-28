@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.context.SecurityContextHolder;
 import ru.panchenko.task_tracker.project.Project;
 
 import java.time.LocalDateTime;

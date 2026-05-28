@@ -2,13 +2,14 @@ package ru.panchenko.task_tracker.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.panchenko.task_tracker.user.dto.UserCreateRequest;
+import ru.panchenko.task_tracker.security.UserPrincipal;
 import ru.panchenko.task_tracker.user.dto.UserResponse;
 import ru.panchenko.task_tracker.user.dto.UserUpdateRequest;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,24 +29,30 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponse> create(@Valid @RequestBody UserCreateRequest request) {
-        UserResponse response = userService.create(request);
-
-        URI location = URI.create("/api/v1/users/" + response.id());
-        return ResponseEntity.created(location).body(response);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> update(
             @PathVariable Long id,
-            @Valid @RequestBody UserUpdateRequest request) {
+            @Valid @RequestBody UserUpdateRequest request,
+            @AuthenticationPrincipal UserPrincipal principal) {
+        if (!principal.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         return ResponseEntity.ok(userService.update(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id,
+                                       @AuthenticationPrincipal UserPrincipal principal) {
+        if (!principal.getId().equals(id)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal UserPrincipal principal) {
+        return ResponseEntity.ok(userService.findById(principal.getId()));
+    }
+
 }

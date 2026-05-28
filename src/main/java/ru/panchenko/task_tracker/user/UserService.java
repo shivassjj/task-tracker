@@ -61,11 +61,11 @@ public class UserService {
             user.setUsername(request.username());
         }
 
-        if (request.username() != null) {
+        if (request.email() != null) {
             if (userRepository.existsByEmail(request.username())) {
                 throw new IllegalArgumentException("Email уже занят");
             }
-            user.setEmail(request.username());
+            user.setEmail(request.email());
         }
 
         return UserResponse.from(user);
@@ -73,8 +73,9 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден: " + id));
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("Пользователь не найден: " + id);
+        }
         userRepository.deleteById(id);
     }
 }
